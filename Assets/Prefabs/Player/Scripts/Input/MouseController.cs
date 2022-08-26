@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MouseController : Controller
 {
-    [SerializeField] private GameObject _head;
+    [SerializeField] private Animator _animator;
     [SerializeField] private float _sensitivityX = 100.0f;
     [SerializeField] private float _sensitivityY = 0.5f;
     [SerializeField] private float xClampBot = 45.0f;
@@ -12,15 +12,18 @@ public class MouseController : Controller
 
 
     private Vector2 _mouseInput;
+    private Vector2 _mousePosition;
     private float _rotationX;
+    private GameObject _head;
 
     public override void ReadInput(Vector2 mouseInput)
     {
         _mouseInput = new Vector2(mouseInput.x * _sensitivityX, mouseInput.y * _sensitivityY);
     }
-    public override void ReadInput(bool jumpInput)
-    {
 
+    public void ReadMousePosition(Vector2 mousePosition)
+    {
+        _mousePosition = mousePosition;
     }
 
     private void Update()
@@ -33,5 +36,11 @@ public class MouseController : Controller
         Vector3 playerRotation = transform.eulerAngles;
         playerRotation.x = _rotationX;
         _head.transform.eulerAngles = playerRotation;
+    }
+
+    private void Start()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        _head = _animator.GetBoneTransform(HumanBodyBones.Head).gameObject;
     }
 }
