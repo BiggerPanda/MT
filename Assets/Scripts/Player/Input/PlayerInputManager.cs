@@ -37,14 +37,14 @@ public class PlayerInputManager : MonoBehaviour
         _groundMovementActions.HorizontalMovement.performed += ctx =>
             _movementInput = ctx.ReadValue<Vector2>();
 
-        _groundMovementActions.Jump.performed += _ =>
+        _groundMovementActions.Jump.started += _ =>
             _movementController.Jump();
 
 
-        _groundMovementActions.MouseX.performed += ctx =>
-            _mouseInput.x = ctx.ReadValue<float>();
+         _groundMovementActions.MouseX.performed += ctx =>
+             _mouseInput.x = ctx.ReadValue<float>();
 
-        _groundMovementActions.MouseY.performed += ctx =>
+         _groundMovementActions.MouseY.performed += ctx =>
             _mouseInput.y = ctx.ReadValue<float>();
 
         _groundMovementActions.Crouch.performed += _ =>
@@ -52,13 +52,7 @@ public class PlayerInputManager : MonoBehaviour
 
         _groundMovementActions.Sprint.performed += _ =>
             _movementController.Sprint();
-        if (!_toggleInput)
-        {
-            _groundMovementActions.Sprint.canceled += _ =>
-               _movementController.Sprint();
-            _groundMovementActions.Crouch.canceled += _ =>
-                _movementController.Crouch();
-        }
+
 
         _groundMovementActions.MousePosition.performed += ctx =>
             _mousePosition = ctx.ReadValue<Vector2>();
@@ -66,28 +60,9 @@ public class PlayerInputManager : MonoBehaviour
 
     private void Update()
     {
-        _movementController.ReadInput(_movementInput);
         _mouseController.ReadInput(_mouseInput);
-        _mouseController.ReadMousePosition(_mousePosition);
+        _movementController.ReadInput(_movementInput);
+       // _mouseController.ReadMousePosition(_mousePosition);
     }
 
-    [ContextMenu("Toggle Input")]
-    private void SwichToggleInput()
-    {   
-        _toggleInput = !_toggleInput;
-        if (!_toggleInput)
-        {
-            _groundMovementActions.Sprint.canceled += _ =>
-                _movementController.Sprint();
-            _groundMovementActions.Crouch.canceled += _ =>
-                _movementController.Crouch();
-        }
-        else
-        {
-            _groundMovementActions.Sprint.canceled -= _ =>
-                _movementController.Sprint();
-            _groundMovementActions.Crouch.canceled -= _ =>
-                _movementController.Crouch();
-        }
-    }
 }
