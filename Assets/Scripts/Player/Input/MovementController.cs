@@ -4,6 +4,7 @@ using UnityEngine;
 using NaughtyAttributes;
 public enum MovementState
 {
+    Idle,
     Walking,  // 0
     Running,  // 1
     Crouching, // 2
@@ -18,6 +19,7 @@ public class MovementController : Controller
     public MovementState movementState;
 
     [Header("Movement")]
+    [SerializeField] private Animator _animator;
     [SerializeField] private float _walkSpeed = 5f;
     [SerializeField] private float _runSpeed = 11f;
     [SerializeField] private float _crouchSpeed = 2f;
@@ -153,21 +155,28 @@ public class MovementController : Controller
     }
     private void HandleState()
     {
+
         if (_isCrouching)
         {
             movementState = MovementState.Crouching;
         }
-        else if (_isSprinting && grounded)
+        else if (_isSprinting && grounded && _movementInput != Vector2.zero)
         {
             movementState = MovementState.Running;
+            _animator.SetBool("isRunning", true);
+            _animator.SetBool("isWalking", false);
         }
-        else if (grounded || IsOnSlope())
+        else if ((grounded || IsOnSlope()) && _movementInput != Vector2.zero)
         {
             movementState = MovementState.Walking;
+            _animator.SetBool("isWalking", true);
+            _animator.SetBool("isRunning", false);
         }
         else
         {
-            movementState = MovementState.Falling;
+            movementState = MovementState.Idle;
+            _animator.SetBool("isWalking", false);
+            _animator.SetBool("isRunning", false);
         }
     }
     private void HandleGravity()
