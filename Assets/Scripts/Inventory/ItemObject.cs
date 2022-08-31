@@ -9,7 +9,8 @@ public class ItemObject : MonoBehaviour
     
     [SerializeField] private Collider _collider;
     [SerializeField] private InventoryItemData _itemData;
-
+    [SerializeField] private Canvas _canvas;
+    
     private InventorySystemManager _inventorySystemManager;
 
 
@@ -20,17 +21,34 @@ public class ItemObject : MonoBehaviour
     }
     
 
-    public void Awake()
+    public void PickUp()
     {
-
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Player")
+        if(_inventorySystemManager != null)
         {
             _inventorySystemManager.AddItem(_itemData);
             Destroy(gameObject);
+        }
+    }
+    void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Player")
+        {
+            _canvas.gameObject.SetActive(true);
+        }
+    }
+     void OnTriggerStay(Collider other)
+    {
+        if(other.gameObject.tag == "Player")
+        {
+            Quaternion temp = Quaternion.LookRotation(transform.position - other.transform.position);
+            _canvas.transform.rotation = new Quaternion(0, -temp.y, 0, -temp.w);
+        }
+    }
+    void OnTriggerExit(Collider other)
+    {
+        if(other.gameObject.tag == "Player")
+        {
+            _canvas.gameObject.SetActive(false);
         }
     }
 }

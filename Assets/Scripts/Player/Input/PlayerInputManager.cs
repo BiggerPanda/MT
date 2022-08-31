@@ -9,6 +9,7 @@ public class PlayerInputManager : MonoBehaviour
     [SerializeField] bool _toggleInput = false;
     private PlayerInputActions _inputActions;
     private PlayerInputActions.GroundMovementActions _groundMovementActions;
+    private PlayerInputActions.InteractionsActions _interactionsActions;
 
     private Vector2 _movementInput;
     private Vector2 _mouseInput;
@@ -33,6 +34,7 @@ public class PlayerInputManager : MonoBehaviour
     {
         _inputActions = new PlayerInputActions();
         _groundMovementActions = _inputActions.GroundMovement;
+        _interactionsActions = _inputActions.Interactions;
 
         _groundMovementActions.HorizontalMovement.performed += ctx =>
             _movementInput = ctx.ReadValue<Vector2>();
@@ -56,6 +58,9 @@ public class PlayerInputManager : MonoBehaviour
 
         _groundMovementActions.MousePosition.performed += ctx =>
             _mousePosition = ctx.ReadValue<Vector2>();
+
+        _interactionsActions.PickUp.performed += _ =>
+            _mouseController.PickUp();
     }
 
     private void Update()

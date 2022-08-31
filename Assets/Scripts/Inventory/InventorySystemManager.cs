@@ -5,28 +5,43 @@ using UnityEngine;
 public interface IInventorySystemManager
 {
     void AddItem(InventoryItemData itemData);
-    void RemoveItem(InventoryItem itemData);
+    void RemoveItem(InventoryItemData itemData);
 }
 
 public class InventorySystemManager : MonoBehaviour,IInventorySystemManager
 {
-    private Dictionary<InventoryItem, InventoryItemData> _inventoryItemDataDictionary;
+    private Dictionary<InventoryItemData, InventoryItem> _inventoryItemDataDictionary;
     public  List<InventoryItem> _inventoryItems;
 
     void Awake()
     {
-        _inventoryItemDataDictionary = new Dictionary<InventoryItem, InventoryItemData>();
+        _inventoryItemDataDictionary = new Dictionary<InventoryItemData, InventoryItem>();
         _inventoryItems = new List<InventoryItem>();
     }
     public void AddItem(InventoryItemData data)
     {
-        InventoryItem item = new InventoryItem(data);
-        _inventoryItemDataDictionary.Add(item, data);
-        _inventoryItems.Add(item);
+        if(_inventoryItemDataDictionary.TryGetValue(data , out InventoryItem existingData))
+        {
+            existingData.AddItem();
+        }
+        else
+        {
+            InventoryItem item = new InventoryItem(data);
+            _inventoryItemDataDictionary.Add(data, item);
+            _inventoryItems.Add(item);
+        }
+
     }
-    public void RemoveItem(InventoryItem item)
+    public void RemoveItem(InventoryItemData item)
     {
-        _inventoryItemDataDictionary.Remove(item);
-        _inventoryItems.Remove(item);
+        if(_inventoryItemDataDictionary.TryGetValue(item, out InventoryItem existingItem))
+        {
+            existingItem.RemoveItem();
+            if(existingItem._amount == 0)
+            {
+                _inventoryItemDataDictionary.Remove(item);
+                _inventoryItems.Remove(existingItem);
+            }
+        }
     }
 }
