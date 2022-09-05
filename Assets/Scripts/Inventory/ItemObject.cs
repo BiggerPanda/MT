@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using NaughtyAttributes;
 using UnityEngine;
 using Zenject;
 
@@ -8,7 +7,7 @@ public class ItemObject : MonoBehaviour
 {
     
     [SerializeField] private Collider _collider;
-    [SerializeField] private InventoryItemData _itemData;
+    [Expandable] [SerializeField] private InventoryItemData _itemData;
     [SerializeField] private Canvas _canvas;
     
     private InventorySystemManager _inventorySystemManager;
