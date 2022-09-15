@@ -10,6 +10,9 @@ namespace MT.Inventory
         [SerializeField] protected Image _objectImage;
         protected InventoryItemData _itemData;
         protected Vector2 _size;
+        public InventoryItemData ItemData => _itemData;
+        public Vector2 PositionOnGrid;
+
 
         public virtual void Setup(InventoryItemData data)
         {

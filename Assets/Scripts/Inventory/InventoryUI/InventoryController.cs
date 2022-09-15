@@ -12,15 +12,15 @@ namespace MT.Inventory
         [SerializeField] private GameObject _itemPrefab;
         [SerializeField] private RectTransform _canvasRectTransform;
         public GridItem _currentItemGrid;
-        
+
         private InventorySystemManager _inventorySystemManager;
         private Vector2 _mousePosition;
         private bool _isOpened = false;
         private InventoryItem _selectedItem;
         private RectTransform _selectedItemRectTransform;
-        
-        
-        
+
+
+
 
         [Inject]
         public virtual void Construct(InventorySystemManager inventorySystemManager)
@@ -52,7 +52,7 @@ namespace MT.Inventory
             }
 
             Vector2Int position = _currentItemGrid.GetGridPosition(_mousePosition);
-            
+
             if (_selectedItem == null)
             {
                 PickUpItemOnGrid(position);
@@ -97,17 +97,17 @@ namespace MT.Inventory
         {
             _inventorySystemManager.AddItem(itemData);
         }
-        
+
         public virtual void CreateRandomItem(List<InventoryItemData> randomItemDatas)
         {
             InventoryItem inventoryItem = Instantiate(_itemPrefab).GetComponent<InventoryItem>();
             _selectedItem = inventoryItem;
-            
+
             _selectedItemRectTransform = inventoryItem.GetComponent<RectTransform>();
             _selectedItemRectTransform.SetParent(_canvasRectTransform);
-            
-            
-            inventoryItem.Setup(randomItemDatas[Random.Range(0, randomItemDatas.Count - 1)]);
+
+
+            inventoryItem.Setup(randomItemDatas[Random.Range(0, randomItemDatas.Count)]);
         }
     }
 }
