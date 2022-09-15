@@ -242,6 +242,54 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Inventory"",
+            ""id"": ""b0689dc4-ca5e-4ea6-b117-3a7895618722"",
+            ""actions"": [
+                {
+                    ""name"": ""OpenInventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""4a5ac05f-d3b1-486c-98c2-a5635885b7a2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LeftButtonClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""93fab707-c73d-475f-9d18-70d522b7b321"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""ef970bee-1681-4afb-b289-faba35534e25"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c6cf0cc9-b3a3-4284-9baa-f5fbc93fb9d7"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeftButtonClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -258,6 +306,10 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         // Interactions
         m_Interactions = asset.FindActionMap("Interactions", throwIfNotFound: true);
         m_Interactions_PickUp = m_Interactions.FindAction("PickUp", throwIfNotFound: true);
+        // Inventory
+        m_Inventory = asset.FindActionMap("Inventory", throwIfNotFound: true);
+        m_Inventory_OpenInventory = m_Inventory.FindAction("OpenInventory", throwIfNotFound: true);
+        m_Inventory_LeftButtonClick = m_Inventory.FindAction("LeftButtonClick", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -427,6 +479,47 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         }
     }
     public InteractionsActions @Interactions => new InteractionsActions(this);
+
+    // Inventory
+    private readonly InputActionMap m_Inventory;
+    private IInventoryActions m_InventoryActionsCallbackInterface;
+    private readonly InputAction m_Inventory_OpenInventory;
+    private readonly InputAction m_Inventory_LeftButtonClick;
+    public struct InventoryActions
+    {
+        private @PlayerInputActions m_Wrapper;
+        public InventoryActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @OpenInventory => m_Wrapper.m_Inventory_OpenInventory;
+        public InputAction @LeftButtonClick => m_Wrapper.m_Inventory_LeftButtonClick;
+        public InputActionMap Get() { return m_Wrapper.m_Inventory; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(InventoryActions set) { return set.Get(); }
+        public void SetCallbacks(IInventoryActions instance)
+        {
+            if (m_Wrapper.m_InventoryActionsCallbackInterface != null)
+            {
+                @OpenInventory.started -= m_Wrapper.m_InventoryActionsCallbackInterface.OnOpenInventory;
+                @OpenInventory.performed -= m_Wrapper.m_InventoryActionsCallbackInterface.OnOpenInventory;
+                @OpenInventory.canceled -= m_Wrapper.m_InventoryActionsCallbackInterface.OnOpenInventory;
+                @LeftButtonClick.started -= m_Wrapper.m_InventoryActionsCallbackInterface.OnLeftButtonClick;
+                @LeftButtonClick.performed -= m_Wrapper.m_InventoryActionsCallbackInterface.OnLeftButtonClick;
+                @LeftButtonClick.canceled -= m_Wrapper.m_InventoryActionsCallbackInterface.OnLeftButtonClick;
+            }
+            m_Wrapper.m_InventoryActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @OpenInventory.started += instance.OnOpenInventory;
+                @OpenInventory.performed += instance.OnOpenInventory;
+                @OpenInventory.canceled += instance.OnOpenInventory;
+                @LeftButtonClick.started += instance.OnLeftButtonClick;
+                @LeftButtonClick.performed += instance.OnLeftButtonClick;
+                @LeftButtonClick.canceled += instance.OnLeftButtonClick;
+            }
+        }
+    }
+    public InventoryActions @Inventory => new InventoryActions(this);
     public interface IGroundMovementActions
     {
         void OnHorizontalMovement(InputAction.CallbackContext context);
@@ -440,5 +533,10 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     public interface IInteractionsActions
     {
         void OnPickUp(InputAction.CallbackContext context);
+    }
+    public interface IInventoryActions
+    {
+        void OnOpenInventory(InputAction.CallbackContext context);
+        void OnLeftButtonClick(InputAction.CallbackContext context);
     }
 }

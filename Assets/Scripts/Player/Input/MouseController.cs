@@ -8,7 +8,7 @@ public class MouseController : Controller
     private float pitch, yaw = 0;
     private float _mouseSensitivity = 0.1f;
     private Vector2 _mouseInput;
-     private RaycastHit _pickUpRaycast;
+    private RaycastHit _pickUpRaycast;
 
     public override void ReadInput(Vector2 input)
     {
@@ -34,7 +34,7 @@ public class MouseController : Controller
         Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * 2, Color.red,2);
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out _pickUpRaycast, 3f))
         {
-            if (_pickUpRaycast.collider.gameObject.layer == LayerMask.NameToLayer("Pickable"))
+            if (_pickUpRaycast.collider.gameObject.CompareTag("Item"))
             {
                 _pickUpRaycast.collider.gameObject.GetComponent<ItemObject>().PickUp();
                 Debug.Log("Picked up");

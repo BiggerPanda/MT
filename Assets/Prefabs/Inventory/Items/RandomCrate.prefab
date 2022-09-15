@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6849879635131018423}
   - component: {fileID: 6610100232637252715}
   - component: {fileID: 7707367725261800673}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -113,9 +113,9 @@ GameObject:
   - component: {fileID: 4548366197182258419}
   - component: {fileID: 6189553323990991794}
   - component: {fileID: 551741659302224323}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: RandomCrate
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -192,7 +192,7 @@ GameObject:
   - component: {fileID: 6825360218455438990}
   - component: {fileID: 7112747814401186423}
   - component: {fileID: 6671081630844110463}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -325,7 +325,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7996157902159259488}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: ObjectToRotate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
