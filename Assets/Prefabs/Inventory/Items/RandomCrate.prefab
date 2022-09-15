@@ -183,6 +183,8 @@ MonoBehaviour:
   _canvas: {fileID: 6849879635131018423}
   _randomItemDatas:
   - {fileID: 11400000, guid: 73a8c9ca3d3e4824dbe2f939ddf8ebc0, type: 2}
+  - {fileID: 11400000, guid: 916ba9914750d79439c0bc3855fd9ca7, type: 2}
+  - {fileID: 11400000, guid: 77c5f1cb11ac51b4ea32f2582c6b3fe8, type: 2}
 --- !u!1 &6660118099922262170
 GameObject:
   m_ObjectHideFlags: 0

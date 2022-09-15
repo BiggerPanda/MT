@@ -8,8 +8,8 @@ namespace MT.Inventory
 {
     public class GridItem : MonoBehaviour
     {
-        const float tileSizeX = 64f;
-        const float tileSizeY = 64f;
+        public const float TILE_SIZE_X = 64f;
+        public const float TILE_SIZE_Y = 64f;
 
         [SerializeField] private Image inventory;
         public int _inventoryXSize = 5;
@@ -36,7 +36,7 @@ namespace MT.Inventory
         private void Init(int width , int height)
         {
             _inventoryItem = new InventoryItem[width, height];
-            inventory.rectTransform.sizeDelta = new Vector2(width * tileSizeX, height * tileSizeY);
+            inventory.rectTransform.sizeDelta = new Vector2(width * TILE_SIZE_X, height * TILE_SIZE_Y);
         }
 
         // Update is called once per frame
@@ -49,8 +49,8 @@ namespace MT.Inventory
         {
             _positionOnGrid.x = position.x - inventory.rectTransform.position.x;
             _positionOnGrid.y = inventory.rectTransform.position.y - position.y;
-            _tileGridPosition.x = (int)(_positionOnGrid.x / tileSizeX);
-            _tileGridPosition.y = (int)(_positionOnGrid.y / tileSizeY);
+            _tileGridPosition.x = (int)(_positionOnGrid.x / TILE_SIZE_X);
+            _tileGridPosition.y = (int)(_positionOnGrid.y / TILE_SIZE_Y);
 
             return _tileGridPosition;
         }
@@ -61,8 +61,8 @@ namespace MT.Inventory
             itemTransform.SetParent(inventory.transform);
             _inventoryItem[position.x, position.y] = item;
             
-            float positionX = (position.x * tileSizeX )+ tileSizeX / 2;
-            float positionY = (position.y * tileSizeY )+ tileSizeY / 2;
+            float positionX = (position.x * TILE_SIZE_X )+ TILE_SIZE_X / 2;
+            float positionY = (position.y * TILE_SIZE_Y )+ TILE_SIZE_Y / 2;
             Vector2 itemPosition = new Vector2(positionX,-positionY);
             itemTransform.localPosition = itemPosition;
         }
