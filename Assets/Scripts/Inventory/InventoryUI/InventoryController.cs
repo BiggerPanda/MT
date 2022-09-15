@@ -1,65 +1,113 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using Zenject;
+using Random = UnityEngine.Random;
 
 namespace MT.Inventory
 {
     public class InventoryController : MonoBehaviour
     {
-        private InventorySystemManager _inventorySystemManager;
+        [SerializeField] private GameObject _itemPrefab;
+        [SerializeField] private RectTransform _canvasRectTransform;
         public GridItem _currentItemGrid;
+        
+        private InventorySystemManager _inventorySystemManager;
         private Vector2 _mousePosition;
-        bool isOpened = false;
+        private bool _isOpened = false;
+        private InventoryItem _selectedItem;
+        private RectTransform _selectedItemRectTransform;
+        
+        
+        
 
         [Inject]
-        public void Construct(InventorySystemManager inventorySystemManager)
+        public virtual void Construct(InventorySystemManager inventorySystemManager)
         {
             _inventorySystemManager = inventorySystemManager;
         }
 
-        public void ReadInput(Vector2 input)
+        public virtual void ReadInput(Vector2 input)
         {
             _mousePosition = input;
         }
-        // Start is called before the first frame update
 
-        void Start()
+        protected virtual void Awake()
         {
-
+            _canvasRectTransform = _currentItemGrid.GetComponent<RectTransform>();
         }
 
-        public void ToggleInventory()
+        public virtual void ToggleInventory()
         {
-            isOpened = !isOpened;
-            if (isOpened)
+            _isOpened = !_isOpened;
+            Cursor.lockState = _isOpened ? CursorLockMode.Confined : CursorLockMode.Locked;
+        }
+
+        public virtual void OnMouseClick()
+        {
+            if (_currentItemGrid == null || !_currentItemGrid.gameObject.activeSelf)
             {
-                Cursor.lockState = CursorLockMode.Confined;
+                return;
+            }
+
+            Vector2Int position = _currentItemGrid.GetGridPosition(_mousePosition);
+            
+            if (_selectedItem == null)
+            {
+                PickUpItemOnGrid(position);
             }
             else
             {
-                Cursor.lockState = CursorLockMode.Locked;
+                PlaceItem(position);
             }
         }
 
-        public void OnMouseClick()
+        protected virtual void PickUpItemOnGrid(Vector2Int position)
         {
-            if (_currentItemGrid == null)
+            _selectedItem = _currentItemGrid.PickItem(position);
+            if (_selectedItem != null)
             {
-                return;
+                _selectedItemRectTransform = _selectedItem.GetComponent<RectTransform>();
             }
-            if (!_currentItemGrid.gameObject.activeSelf)
-            {
-                return;
-            }
-            Debug.Log(_currentItemGrid.GetGridPosition(_mousePosition));
+        }
+
+        protected virtual void PlaceItem(Vector2Int position)
+        {
+            _currentItemGrid.AddItem(_selectedItem, position);
+            _selectedItem = null;
         }
 
 
         // Update is called once per frame
-        void Update()
+        protected virtual void Update()
         {
+            ItemIconDragHandle();
+        }
 
+        protected virtual void ItemIconDragHandle()
+        {
+            if (_selectedItem != null)
+            {
+                _selectedItemRectTransform.position = _mousePosition;
+            }
+        }
+
+        public virtual void AddItemToInventory(InventoryItemData itemData)
+        {
+            _inventorySystemManager.AddItem(itemData);
+        }
+        
+        public virtual void CreateRandomItem(List<InventoryItemData> randomItemDatas)
+        {
+            InventoryItem inventoryItem = Instantiate(_itemPrefab).GetComponent<InventoryItem>();
+            _selectedItem = inventoryItem;
+            
+            _selectedItemRectTransform = inventoryItem.GetComponent<RectTransform>();
+            _selectedItemRectTransform.SetParent(_canvasRectTransform);
+            
+            
+            inventoryItem.Setup(randomItemDatas[Random.Range(0, randomItemDatas.Count - 1)]);
         }
     }
 }

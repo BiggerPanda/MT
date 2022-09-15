@@ -112,7 +112,7 @@ GameObject:
   - component: {fileID: 4548366197182258418}
   - component: {fileID: 4548366197182258419}
   - component: {fileID: 6189553323990991794}
-  - component: {fileID: 551741659302224323}
+  - component: {fileID: 1441927593757325308}
   m_Layer: 0
   m_Name: RandomCrate
   m_TagString: Item
@@ -166,7 +166,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 4, y: 1, z: 4}
   m_Center: {x: 0, y: 0.5, z: 0}
---- !u!114 &551741659302224323
+--- !u!114 &1441927593757325308
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -175,12 +175,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 4548366197182258420}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 790418a75530f0343b9cedf2b226911e, type: 3}
+  m_Script: {fileID: 11500000, guid: 6b6fa956320603e4ab4b22e3e7186bc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _itemData: {fileID: 11400000, guid: 73a8c9ca3d3e4824dbe2f939ddf8ebc0, type: 2}
   _collider: {fileID: 6189553323990991794}
-  _itemData: {fileID: 11400000, guid: baadd6cfbf4e9a944889df87d33c8791, type: 2}
   _canvas: {fileID: 6849879635131018423}
+  _randomItemDatas:
+  - {fileID: 11400000, guid: 73a8c9ca3d3e4824dbe2f939ddf8ebc0, type: 2}
 --- !u!1 &6660118099922262170
 GameObject:
   m_ObjectHideFlags: 0

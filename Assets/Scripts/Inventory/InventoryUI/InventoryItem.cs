@@ -1,21 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace MT.Inventory
 {
     public class InventoryItem : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
+        [SerializeField] protected Image _objectImage;
+        protected InventoryItemData _itemData;
+
+
+        public virtual void Setup(InventoryItemData data)
         {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
+            _itemData = data;
+            _objectImage.sprite = _itemData.itemIcon;
         }
     }
 }

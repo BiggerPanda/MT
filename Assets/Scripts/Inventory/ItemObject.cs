@@ -1,3 +1,4 @@
+using MT.Inventory;
 using NaughtyAttributes;
 using UnityEngine;
 using Zenject;
@@ -5,47 +6,47 @@ using Zenject;
 [RequireComponent(typeof(Collider))]
 public class ItemObject : MonoBehaviour
 {
-    
-    [SerializeField] private Collider _collider;
     [Expandable] [SerializeField] private InventoryItemData _itemData;
-    [SerializeField] private Canvas _canvas;
+
+    [SerializeField] protected Collider _collider;
+    [SerializeField] protected Canvas _canvas;
     
-    private InventorySystemManager _inventorySystemManager;
+    protected InventoryController _inventoryController;
 
 
     [Inject]
-    public void Construct(InventorySystemManager inventorySystemManager)
+    public virtual void Construct(InventorySystemManager inventorySystemManager , InventoryController inventoryController)
     {
-        _inventorySystemManager = inventorySystemManager;
+        _inventoryController = inventoryController;
     }
     
 
-    public void PickUp()
+    public virtual void PickUp()
     {
-        if(_inventorySystemManager != null)
+        if(_inventoryController != null)
         {
-            _inventorySystemManager.AddItem(_itemData);
+            _inventoryController.AddItemToInventory(_itemData);
             Destroy(gameObject);
         }
     }
-    void OnTriggerEnter(Collider other)
+    protected  virtual void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Player")
+        if(other.gameObject.CompareTag("Player"))
         {
             _canvas.gameObject.SetActive(true);
         }
     }
-     void OnTriggerStay(Collider other)
+    protected virtual void OnTriggerStay(Collider other)
     {
-        if(other.gameObject.tag == "Player")
+        if(other.gameObject.CompareTag("Player"))
         {
             Quaternion temp = Quaternion.LookRotation(transform.position - other.transform.position);
             _canvas.transform.rotation = new Quaternion(0, -temp.y, 0, -temp.w);
         }
     }
-    void OnTriggerExit(Collider other)
+    protected virtual void OnTriggerExit(Collider other)
     {
-        if(other.gameObject.tag == "Player")
+        if(other.gameObject.CompareTag("Player"))
         {
             _canvas.gameObject.SetActive(false);
         }

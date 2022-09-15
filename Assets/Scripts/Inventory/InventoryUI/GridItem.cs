@@ -12,7 +12,6 @@ namespace MT.Inventory
         const float tileSizeY = 64f;
 
         [SerializeField] private Image inventory;
-        [SerializeField] private GameObject _itemPrefab;
         public int _inventoryXSize = 5;
         public int _inventoryYSize = 5;
         private Vector2 _positionOnGrid;
@@ -32,12 +31,6 @@ namespace MT.Inventory
         private void Start()
         {
             Init(_inventoryXSize, _inventoryYSize);
-            InventoryItem item = Instantiate(_itemPrefab).GetComponent<InventoryItem>();
-            InventoryItem item2 = Instantiate(_itemPrefab).GetComponent<InventoryItem>();
-            InventoryItem item3 = Instantiate(_itemPrefab).GetComponent<InventoryItem>();
-            AddItem(item, new Vector2Int(4, 3));
-            AddItem(item2, new Vector2Int(2, 2));
-            AddItem(item3, new Vector2Int(1, 1));
         }
 
         private void Init(int width , int height)
@@ -74,5 +67,16 @@ namespace MT.Inventory
             itemTransform.localPosition = itemPosition;
         }
 
+        public InventoryItem PickItem(Vector2Int position)
+        {
+            InventoryItem item = _inventoryItem[position.x, position.y];
+            _inventoryItem[position.x, position.y] = null;
+            return item;
+        }
+
+        public bool IsEmpty(int x, int y)
+        {
+            return _inventoryItem[x, y] == null;
+        }
     }
 }
